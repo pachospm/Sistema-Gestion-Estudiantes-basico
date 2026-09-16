@@ -1,0 +1,23 @@
+# Ignora archivos .class generados al compilar Java.
+*.class
+
+# Ignora la carpeta de compilación creada por Ant/NetBeans.
+build/
+
+# Ignora la carpeta de distribución creada por NetBeans.
+dist/
+
+# Ignora configuraciones privadas de NetBeans.
+nbproject/private/
+
+# Ignora configuraciones específicas del usuario.
+nbproject/private.properties
+
+# Ignora archivos temporales.
+*.log
+
+# Ignora archivos propios de macOS.
+.DS_Store
+
+# Ignora archivos temporales de Windows.
+Thumbs.db
