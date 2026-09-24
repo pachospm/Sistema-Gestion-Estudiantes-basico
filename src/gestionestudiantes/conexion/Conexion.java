@@ -10,7 +10,7 @@ public class Conexion {
     private final String URL = "jdbc:mysql://localhost:3306/";
 
     // Nombre de la base de datos que vamos a utilizar
-    private final String DB = "dbsistema";
+    private final String DB = "gestion_estudiantes";
 
     // Usuario de MySQL
     private final String USER = "root";
