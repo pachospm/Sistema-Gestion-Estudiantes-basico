@@ -75,17 +75,78 @@ public class EstudianteDAOImpl implements EstudianteDAO{
 
     @Override
     public Estudiante buscarPorDocumento(String documento) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        // Creamos una consulta parametrizada
+        String sql = "SELECT id, documento, nombre, apellido, "
+                     + "correo, programa, semestre"
+                     + "FROM estudiantes WHERE documento = ?";
+        // Abrimos conexión y PreparedStatement
+        try(
+            Connection conexion = Conexion.getInstancia().conectar();
+            PreparedStatement ps = conexion.prepareStatement(sql);
+        ){
+            ps.setString(1, documento);
+            
+            // Ejecutamos el SELECT
+            try( ResultSet rs = ps.executeQuery()){
+                // rs.next() retorna true si existe un resultado
+                if(rs.next()){
+                    Estudiante estudiante = new Estudiante(
+                            rs.getInt("id"),
+                            rs.getString("documento"),
+                            rs.getString("nombre"),
+                            rs.getString("apellido"),
+                            rs.getString("correo"),
+                            rs.getString("programa"),
+                            rs.getInt("Semestre")
+                    );
+                    // Retornamos el estudiante encontrado
+                    return estudiante;
+                }
+            }
+        }
+        return null;
     }
 
     @Override
     public boolean actualizar(Estudiante estudiante) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        String sql = "UPDATE estudiantes "
+                    + "SET docuento = ?, "
+                    + "nombre = ?, apellido = ?, correo = ?, programa = ?"
+                    + "semestre = ? WHERE id = ?";
+        
+        // Abrimos nuestros recursos JDBC
+        try(
+            Connection conexion = Conexion.getInstancia().conectar();
+            PreparedStatement ps = conexion.prepareStatement(sql);
+        ){
+            ps.setString(1, estudiante.getDocumento());
+            ps.setString(2, estudiante.getNombre());
+            ps.setString(3, estudiante.getApellido());
+            ps.setString(4, estudiante.getCorreo());
+            ps.setString(5, estudiante.getPrograma());
+            ps.setInt(6, estudiante.getSemestre());
+            ps.setInt(7, estudiante.getId());
+            
+            int filasAfectadas = ps.executeUpdate();
+            // retornamos true si se modifica alguna fila
+            return filasAfectadas > 0;
+        }
     }
 
     @Override
     public boolean eliminar(int id) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        
+        String sql = "DELETE FROM estudiantes WHERE id = ?";
+        
+        try(
+            Connection conexion = Conexion.getInstancia().conectar();
+            PreparedStatement ps = conexion.prepareStatement(sql);
+        ){
+            // Asignamos el identificador
+            ps.setInt(1, id);
+            int filasAfectadas = ps.executeUpdate();
+            return filasAfectadas > 0;
+        }
     }
     
     
