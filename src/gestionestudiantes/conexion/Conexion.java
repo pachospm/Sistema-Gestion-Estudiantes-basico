@@ -1,46 +1,49 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package gestionestudiantes.conexion;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-/**
- *
- * @author OMEN
- */
 public class Conexion {
-    private final String DRIVER = "com.mysql.cj.jdbc.Driver";
+
+    // Dirección del servidor MySQL
     private final String URL = "jdbc:mysql://localhost:3306/";
-     private final String DB = "dbsistema";
+
+    // Nombre de la base de datos que vamos a utilizar
+    private final String DB = "dbsistema";
+
+    // Usuario de MySQL
     private final String USER = "root";
+
+    // Contraseña de MySQL
+    // Si usa XAMPP normalmente root no tiene contraseña
     private final String PASSWORD = "";
-    
-    // Declarar una variable que almacerá la única instancia de Conexion
+
+    // Única instancia de la clase Conexion
     private static Conexion instancia;
-    
-    // Creamos un constructor privado
-    // Al ser private ningua otra clase podrá escribir new Conexion()
-    private Conexion(){
-        
+
+    // Constructor privado para aplicar Singleton
+    private Conexion() {
+
     }
-    
-    // Creamos un método público y estático para obtener la instacia.
-    public static Conexion getInstancia(){
-        // Verificamos si todavía no hemos creado una instancia
-        if(instancia == null){
-            // Creamos la isntancia únicamente la primera vez
+
+    // Método para obtener la única instancia
+    public static Conexion getInstancia() {
+
+        if (instancia == null) {
             instancia = new Conexion();
         }
+
         return instancia;
     }
-    
-    public Connection conectar() throws SQLException{
+
+    // Método que realiza la conexión con MySQL
+    public Connection conectar() throws SQLException {
+
+        // Aquí estaba el error.
+        // Debemos concatenar URL + DB
         return DriverManager.getConnection(
-                URL,
+                URL + DB,
                 USER,
                 PASSWORD
         );
