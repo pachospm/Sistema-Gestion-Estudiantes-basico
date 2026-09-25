@@ -34,7 +34,7 @@ public class PruebaDao {
                 System.out.println(item);
             }
         }catch(SQLException e){
-            System.out.println("ERROR" + e.getMessage());
+            System.out.println("ERROR " + e.getMessage());
         }
     }
     

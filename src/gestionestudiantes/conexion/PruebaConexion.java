@@ -9,7 +9,7 @@ import java.sql.SQLException;
 /**
  *
  * @author fsamaca
-
+*/
 public class PruebaConexion {
     public static void main(String[] args) {
         try{
@@ -23,4 +23,4 @@ public class PruebaConexion {
         }
     }
 }
- */
+ 
