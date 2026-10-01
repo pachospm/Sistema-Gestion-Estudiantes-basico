@@ -17,29 +17,27 @@ import java.sql.ResultSet;
  *
  * @author fsamaca
  */
-public class EstudianteDAOImpl implements EstudianteDAO{
+public class EstudianteDAOImpl implements EstudianteDAO {
 
     @Override
     public boolean insertar(Estudiante estudiante) throws SQLException {
         // Cremaos la instrucción SQL
         // Los sigenos ? serán reemplazados posteriormente
-        String sql = "INSERT INTO estudiantes" 
+        String sql = "INSERT INTO estudiantes"
                 + "(documento, nombre, apellido, correo, programa, semestre)"
                 + "VALUES (?,?,?,?,?,?)";
         // Utilizar un try-with-resources
         // java cerrará automaticamente los recursos al finalizar
-        try(
-            Connection conexion = Conexion.getInstancia().conectar();
-            //Prepara la sentencia SQL
-            PreparedStatement ps = conexion.prepareStatement(sql);
-        ){
+        try (
+                Connection conexion = Conexion.getInstancia().conectar(); //Prepara la sentencia SQL
+                 PreparedStatement ps = conexion.prepareStatement(sql);) {
             ps.setString(1, estudiante.getDocumento());
             ps.setString(2, estudiante.getNombre());
             ps.setString(3, estudiante.getApellido());
             ps.setString(4, estudiante.getCorreo());
             ps.setString(5, estudiante.getPrograma());
             ps.setInt(6, estudiante.getSemestre());
-            
+
             // Ejecutamos el ISNERT.
             // executeUpdate retorna cuantas filas fueron afectadas
             int filasAfectadas = ps.executeUpdate();
@@ -53,12 +51,9 @@ public class EstudianteDAOImpl implements EstudianteDAO{
         List<Estudiante> estudiantes = new ArrayList<>();
         //Creamos consulta SQL SELECT
         String sql = "SELECT id,documento,nombre,apellido,correo,programa,semestre FROM estudiantes ORDER BY id DESC";
-        try(
-            Connection conexion = Conexion.getInstancia().conectar();
-            PreparedStatement ps = conexion.prepareStatement(sql);
-            ResultSet rs = ps.executeQuery();
-        ){
-            while(rs.next()){
+        try (
+                Connection conexion = Conexion.getInstancia().conectar(); PreparedStatement ps = conexion.prepareStatement(sql); ResultSet rs = ps.executeQuery();) {
+            while (rs.next()) {
                 Estudiante estudiante = new Estudiante();
                 estudiante.setId(rs.getInt("id"));
                 estudiante.setDocumento(rs.getString("documento"));
@@ -75,50 +70,49 @@ public class EstudianteDAOImpl implements EstudianteDAO{
 
     @Override
     public Estudiante buscarPorDocumento(String documento) throws SQLException {
-        // Creamos una consulta parametrizada
+        //Se corrigio buscarPorDocumento
         String sql = "SELECT id, documento, nombre, apellido, "
-                     + "correo, programa, semestre"
-                     + "FROM estudiantes WHERE documento = ?";
-        // Abrimos conexión y PreparedStatement
-        try(
-            Connection conexion = Conexion.getInstancia().conectar();
-            PreparedStatement ps = conexion.prepareStatement(sql);
-        ){
+                + "correo, programa, semestre "
+                + "FROM estudiantes "
+                + "WHERE documento = ?";
+
+        try (
+                Connection conexion = Conexion.getInstancia().conectar(); PreparedStatement ps = conexion.prepareStatement(sql);) {
+
+            System.out.println("SQL BUSCAR: " + sql);
+
             ps.setString(1, documento);
-            
-            // Ejecutamos el SELECT
-            try( ResultSet rs = ps.executeQuery()){
-                // rs.next() retorna true si existe un resultado
-                if(rs.next()){
-                    Estudiante estudiante = new Estudiante(
+
+            try (ResultSet rs = ps.executeQuery()) {
+
+                if (rs.next()) {
+
+                    return new Estudiante(
                             rs.getInt("id"),
                             rs.getString("documento"),
                             rs.getString("nombre"),
                             rs.getString("apellido"),
                             rs.getString("correo"),
                             rs.getString("programa"),
-                            rs.getInt("Semestre")
+                            rs.getInt("semestre")
                     );
-                    // Retornamos el estudiante encontrado
-                    return estudiante;
                 }
             }
         }
+
         return null;
     }
 
     @Override
     public boolean actualizar(Estudiante estudiante) throws SQLException {
         String sql = "UPDATE estudiantes "
-                    + "SET docuento = ?, "
-                    + "nombre = ?, apellido = ?, correo = ?, programa = ?"
-                    + "semestre = ? WHERE id = ?";
-        
+                + "SET docuento = ?, "
+                + "nombre = ?, apellido = ?, correo = ?, programa = ?"
+                + "semestre = ? WHERE id = ?";
+
         // Abrimos nuestros recursos JDBC
-        try(
-            Connection conexion = Conexion.getInstancia().conectar();
-            PreparedStatement ps = conexion.prepareStatement(sql);
-        ){
+        try (
+                Connection conexion = Conexion.getInstancia().conectar(); PreparedStatement ps = conexion.prepareStatement(sql);) {
             ps.setString(1, estudiante.getDocumento());
             ps.setString(2, estudiante.getNombre());
             ps.setString(3, estudiante.getApellido());
@@ -126,7 +120,7 @@ public class EstudianteDAOImpl implements EstudianteDAO{
             ps.setString(5, estudiante.getPrograma());
             ps.setInt(6, estudiante.getSemestre());
             ps.setInt(7, estudiante.getId());
-            
+
             int filasAfectadas = ps.executeUpdate();
             // retornamos true si se modifica alguna fila
             return filasAfectadas > 0;
@@ -135,20 +129,16 @@ public class EstudianteDAOImpl implements EstudianteDAO{
 
     @Override
     public boolean eliminar(int id) throws SQLException {
-        
+
         String sql = "DELETE FROM estudiantes WHERE id = ?";
-        
-        try(
-            Connection conexion = Conexion.getInstancia().conectar();
-            PreparedStatement ps = conexion.prepareStatement(sql);
-        ){
+
+        try (
+                Connection conexion = Conexion.getInstancia().conectar(); PreparedStatement ps = conexion.prepareStatement(sql);) {
             // Asignamos el identificador
             ps.setInt(1, id);
             int filasAfectadas = ps.executeUpdate();
             return filasAfectadas > 0;
         }
     }
-    
-    
-    
+
 }

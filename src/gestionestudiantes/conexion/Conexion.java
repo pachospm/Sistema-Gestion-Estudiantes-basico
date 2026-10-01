@@ -7,7 +7,7 @@ import java.sql.SQLException;
 public class Conexion {
 
     // Dirección del servidor MySQL
-    private final String URL = "jdbc:mysql://localhost:3307/";
+    private final String URL = "jdbc:mysql://localhost:3306/";
 
     // Nombre de la base de datos que vamos a utilizar
     private final String DB = "gestion_estudiantes";
